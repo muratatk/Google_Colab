@@ -1,0 +1,48 @@
+Sub 東証_経産省_攻め()
+
+'行配列を作成する
+    Dim i行 As Integer
+    Dim j列 As Integer
+    
+    'Dim driver As New Selenium.ChromeDriver
+    
+    Dim searchWord As String
+    Dim Url As String
+    Dim sns As String
+    'driver.Start "edge"
+    
+   'Load UserForm1
+    
+    
+    
+For i行 = 2 To 2457
+    For j列 = 4 To 9
+
+    
+Cells(i行, j列).Value = Cells(i行, 1).Value + " " + Cells(1, j列).Value
+
+
+searchWord = Cells(i行, j列).Value
+
+'MsgBox searchWord
+
+
+Url = "https://www.google.com/search?q=" & searchWord
+sns = "https://www.google.com/search?q=" & "公式sns    "
+'MsgBox Url
+
+
+
+
+
+Cells(i行, j列).Value = Url
+    
+    
+ 
+
+
+    Next j列
+Next i行
+
+
+End Sub
