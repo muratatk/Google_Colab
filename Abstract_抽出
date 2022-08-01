@@ -1,0 +1,19 @@
+import os
+from typing import List
+
+path = os.getcwd()
+print(path)
+
+os.chdir('../')
+os.chdir('../')
+print(os.getcwd())
+
+f=open('Bio_Noyaku.txt')
+
+
+  # 入出力のパス
+  #input_path = './Bio_Hiryou_abstract_sample3.txt'
+  #output_path = './result_abstract_Nouyaku_sample3.txt'
+for line in f:
+    if ("Abstract:" in line):
+       print(line, end="")
