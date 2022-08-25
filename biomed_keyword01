@@ -1,0 +1,26 @@
+from google.colab import drive
+drive.mount('/content/drive')]
+
+cd /content/drive/My Drive/bio_micro_01
+
+# 入出力のパス
+input_path = './Bio_Nouyaku.txt'
+output_path = './Bio_Nouyaku_Keywords.txt'
+
+# Grep検索対象
+grep_target1 = 'Keywords:'
+# grep_target2 = 'システムエラー'
+
+# ファイル読み込みとGrep
+with open(input_path, mode='r', encoding='utf-8') as f:
+    lines = f.readlines()
+    # 指定した文字列を含む行を取得
+    GREP_TARGET = [line for line in lines if grep_target1 in line]
+    # 指定した文字列を含まない行を取得
+    # GREP_TARGET = [line for line in lines if grep_target1 not in line]
+    # and/orで条件追加できる
+    # GREP_TARGET = [line for line in lines if grep_target1 in line or grep_target2 in line]
+
+# ファイル出力
+with open(output_path, mode='w', encoding='utf-8') as f:
+    f.writelines(GREP_TARGET)
