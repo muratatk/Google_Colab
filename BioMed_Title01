@@ -1,0 +1,70 @@
+import pandas as pd
+import openpyxl
+import json
+import requests
+
+query = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=deep+learning&retmax=10&retmode=json'
+
+response = requests.get(query)
+
+print(response)
+
+print(response.headers['Content-Type'])
+
+response_json = response.json()
+print(response_json)
+
+
+pmids = response_json['esearchresult']['idlist']
+
+print(pmids)
+
+URL = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=pubmed&retmode=json&id='
+
+queries = [URL + pmid for pmid in pmids]
+# pmids は前回の記事で取得したpmidのリストです。
+
+responses = {} #このあと取得するjsonデータを格納する辞書を作成
+
+for query in queries:
+    response = requests.get(query)
+    res_json = response.json()['result']
+    # responseのjsonを取得し、その中のresultを返す
+    responses.update(res_json)
+    # res_jsonをresponsesに連結する。
+
+#print(responses['36574598'].keys())
+
+#print(responses['36574598']['title']) #pmid = 30478810のタイトルを取得
+# Deep convolutional neural network-based speech enhancement to improve speech intelligibility and quality for hearing-impaired listeners.
+
+# print(responses['36574598']['fulljournalname']) # pmid = 30478810のジャーナルフルネームを取得
+# Medical &amp; biological engineering &amp; computing 文字化け
+
+# print(responses['36574598']['source']) #pmid = 30478810のジャーナル略称を取得
+# Med Biol Eng Comput
+
+Summaries = [{'pmid': pmid,
+              'Title': responses[pmid]['title'],
+              'Author': responses[pmid]['sortfirstauthor'],
+              'Journal': responses[pmid]['source'],
+              'Pubdate': responses[pmid]['epubdate']} for pmid in pmids]
+
+
+data = pd.DataFrame(columns = ['PMID','Title', 'Author', 'Journal', 'Pubdate'])
+# カラム名を指定してデータフレームを作成
+
+PMIDs = [i['pmid'] for i in Summaries]
+Titles = [i['title'] for i in Summaries]
+Authors = [i['Author'] for i in Summaries]
+Journals = [i['Journal'] for i in Summaries]
+Pubdates = [i['Pubdate'] for i in Summaries]
+
+data['PMID'] = PMIDs
+data['Title'] = Titles
+data['Author'] = Authors
+data['Journal'] = Journals
+data['Pubdate'] = Pubdates
+
+
+# カラム名を指定してデータフレームを作成
